@@ -85,24 +85,36 @@ export function AccountBalanceDashboard({ onOpenAddModal }: AccountBalanceDashbo
 
         <div className="relative z-10 flex flex-wrap items-center gap-3">
           <button
-            onClick={() => (onOpenAddModal ? onOpenAddModal('borrow') : openAddModal('borrow'))}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-200 border border-amber-400/30 hover:bg-amber-500/30 transition-all flex items-center gap-1.5"
+            type="button"
+            onClick={() => {
+              if (onOpenAddModal) onOpenAddModal('borrow');
+              else openAddModal('borrow');
+            }}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-200 border border-amber-400/30 hover:bg-amber-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <ArrowDownLeft className="w-4 h-4 text-amber-300" />
             <span>+ Borrow</span>
           </button>
 
           <button
-            onClick={() => (onOpenAddModal ? onOpenAddModal('lending') : openAddModal('lending'))}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 hover:bg-emerald-500/30 transition-all flex items-center gap-1.5"
+            type="button"
+            onClick={() => {
+              if (onOpenAddModal) onOpenAddModal('lending');
+              else openAddModal('lending');
+            }}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 hover:bg-emerald-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <ArrowUpRight className="w-4 h-4 text-emerald-300" />
             <span>+ Lend</span>
           </button>
 
           <button
-            onClick={() => (onOpenAddModal ? onOpenAddModal('expense') : openAddModal('expense'))}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-200 border border-rose-400/30 hover:bg-rose-500/30 transition-all flex items-center gap-1.5"
+            type="button"
+            onClick={() => {
+              if (onOpenAddModal) onOpenAddModal('expense');
+              else openAddModal('expense');
+            }}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-200 border border-rose-400/30 hover:bg-rose-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Plus className="w-4 h-4 text-rose-300" />
             <span>+ Expense</span>
