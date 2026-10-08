@@ -4,13 +4,15 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Receipt, ArrowLeftRight, Users, Plus } from 'lucide-react';
+import { useStore } from '@/lib/store-context';
 
 interface MobileNavProps {
-  onOpenAddModal: () => void;
+  onOpenAddModal?: () => void;
 }
 
-export function MobileNav({ onOpenAddModal }: MobileNavProps) {
+export function MobileNav({ onOpenAddModal }: MobileNavProps = {}) {
   const pathname = usePathname();
+  const { openAddModal } = useStore();
 
   const links = [
     { href: '/', label: 'Balance', icon: LayoutDashboard },
@@ -18,6 +20,14 @@ export function MobileNav({ onOpenAddModal }: MobileNavProps) {
     { href: '/transactions', label: 'Ledger', icon: ArrowLeftRight },
     { href: '/people', label: 'People', icon: Users },
   ];
+
+  const handleClickAdd = () => {
+    if (onOpenAddModal) {
+      onOpenAddModal();
+    } else {
+      openAddModal('expense');
+    }
+  };
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 py-2 shadow-lg">
@@ -43,7 +53,7 @@ export function MobileNav({ onOpenAddModal }: MobileNavProps) {
         {/* Center Floating Add Button */}
         <div className="flex-1 flex justify-center -mt-6">
           <button
-            onClick={onOpenAddModal}
+            onClick={handleClickAdd}
             className="w-13 h-13 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/35 border-4 border-white active:scale-95 transition-all"
             aria-label="Add Transaction"
           >

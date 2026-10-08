@@ -22,10 +22,10 @@ import { formatCurrency } from '@/lib/constants';
 import { PersonDetailModal } from '../modals/PersonDetailModal';
 
 interface PeopleViewProps {
-  onOpenAddModal: (type?: 'borrow' | 'lending') => void;
+  onOpenAddModal?: (type?: 'borrow' | 'lending') => void;
 }
 
-export function PeopleView({ onOpenAddModal }: PeopleViewProps) {
+export function PeopleView({ onOpenAddModal }: PeopleViewProps = {}) {
   const {
     people,
     personSummaries,
@@ -33,6 +33,7 @@ export function PeopleView({ onOpenAddModal }: PeopleViewProps) {
     updatePerson,
     deletePerson,
     currency,
+    openAddModal,
   } = useStore();
 
   const [search, setSearch] = useState<string>('');
@@ -49,7 +50,7 @@ export function PeopleView({ onOpenAddModal }: PeopleViewProps) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const openAddModal = () => {
+  const openAddPersonModal = () => {
     setEditingPerson(null);
     setFormName('');
     setFormPhone('');
@@ -152,7 +153,7 @@ export function PeopleView({ onOpenAddModal }: PeopleViewProps) {
         </div>
 
         <button
-          onClick={openAddModal}
+          onClick={openAddPersonModal}
           className="px-4 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/25 active:scale-98 transition-all flex items-center gap-1.5 self-start sm:self-auto"
         >
           <UserPlus className="w-4 h-4 stroke-[2.5]" />
@@ -180,7 +181,7 @@ export function PeopleView({ onOpenAddModal }: PeopleViewProps) {
             {search ? 'No contacts match your search query.' : 'Add your first contact to track borrow and lending.'}
           </p>
           <button
-            onClick={openAddModal}
+            onClick={openAddPersonModal}
             className="mt-4 px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-xl hover:bg-blue-700"
           >
             + Add Person
@@ -311,7 +312,7 @@ export function PeopleView({ onOpenAddModal }: PeopleViewProps) {
 
       {/* Add / Edit Person Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200">
           <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <h2 className="text-base font-bold text-slate-900">
@@ -415,8 +416,13 @@ export function PeopleView({ onOpenAddModal }: PeopleViewProps) {
           onClose={() => setSelectedPerson(null)}
           personSummary={selectedPerson}
           onOpenAddTransactionForPerson={(type) => {
+            const pId = selectedPerson.person_id;
             setSelectedPerson(null);
-            onOpenAddModal(type);
+            if (onOpenAddModal) {
+              onOpenAddModal(type);
+            } else {
+              openAddModal(type, pId);
+            }
           }}
         />
       )}

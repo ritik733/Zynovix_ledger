@@ -91,6 +91,18 @@ interface StoreContextType {
   exportDataToJSON: () => string;
   importDataFromJSON: (json: string) => boolean;
 
+  // Global Add Transaction Modal State
+  isAddModalOpen: boolean;
+  addModalType: 'expense' | 'borrow' | 'lending' | 'repayment';
+  addModalPersonId?: string;
+  addModalTransactionId?: string;
+  openAddModal: (
+    type?: 'expense' | 'borrow' | 'lending' | 'repayment',
+    personId?: string,
+    transactionId?: string
+  ) => void;
+  closeAddModal: () => void;
+
   // Auth actions
   signInWithEmail: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signUpWithEmail: (email: string, password: string, fullName?: string) => Promise<{ success: boolean; error?: string }>;
@@ -113,6 +125,32 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [people, setPeople] = useState<Person[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [settlements, setSettlements] = useState<Settlement[]>([]);
+
+  // Global modal state
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [addModalType, setAddModalType] = useState<
+    'expense' | 'borrow' | 'lending' | 'repayment'
+  >('expense');
+  const [addModalPersonId, setAddModalPersonId] = useState<string | undefined>(undefined);
+  const [addModalTransactionId, setAddModalTransactionId] = useState<string | undefined>(undefined);
+
+  const openAddModal = useCallback(
+    (
+      type: 'expense' | 'borrow' | 'lending' | 'repayment' = 'expense',
+      personId?: string,
+      transactionId?: string
+    ) => {
+      setAddModalType(type);
+      setAddModalPersonId(personId);
+      setAddModalTransactionId(transactionId);
+      setIsAddModalOpen(true);
+    },
+    []
+  );
+
+  const closeAddModal = useCallback(() => {
+    setIsAddModalOpen(false);
+  }, []);
 
   // Check Supabase configuration and setup auth
   useEffect(() => {
@@ -832,6 +870,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         resetAllData,
         exportDataToJSON,
         importDataFromJSON,
+        isAddModalOpen,
+        addModalType,
+        addModalPersonId,
+        addModalTransactionId,
+        openAddModal,
+        closeAddModal,
         signInWithEmail,
         signUpWithEmail,
         signOut,

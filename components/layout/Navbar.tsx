@@ -20,12 +20,12 @@ import {
 import { useStore } from '@/lib/store-context';
 
 interface NavbarProps {
-  onOpenAddModal: (defaultType?: 'expense' | 'borrow' | 'lending' | 'repayment') => void;
+  onOpenAddModal?: (defaultType?: 'expense' | 'borrow' | 'lending' | 'repayment') => void;
 }
 
-export function Navbar({ onOpenAddModal }: NavbarProps) {
+export function Navbar({ onOpenAddModal }: NavbarProps = {}) {
   const pathname = usePathname();
-  const { isSupabaseConfigured, isSupabaseConnected, currentUser } = useStore();
+  const { isSupabaseConfigured, isSupabaseConnected, openAddModal } = useStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -100,7 +100,7 @@ export function Navbar({ onOpenAddModal }: NavbarProps) {
           {/* Header Action Button */}
           <div className="flex items-center gap-2">
             <button
-              onClick={() => onOpenAddModal()}
+              onClick={() => (onOpenAddModal ? onOpenAddModal() : openAddModal())}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/25 hover:from-blue-700 hover:to-indigo-700 active:scale-98 transition-all"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />

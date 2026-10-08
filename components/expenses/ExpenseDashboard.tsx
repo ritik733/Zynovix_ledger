@@ -35,7 +35,7 @@ import { ExpensePeriod } from '@/types';
 import { formatCurrency } from '@/lib/constants';
 
 interface ExpenseDashboardProps {
-  onOpenAddModal: () => void;
+  onOpenAddModal?: () => void;
 }
 
 const PERIODS: { label: string; value: ExpensePeriod }[] = [
@@ -64,8 +64,8 @@ const CHART_COLORS = [
   '#64748B',
 ];
 
-export function ExpenseDashboard({ onOpenAddModal }: ExpenseDashboardProps) {
-  const { enrichedTransactions, categories, currency } = useStore();
+export function ExpenseDashboard({ onOpenAddModal }: ExpenseDashboardProps = {}) {
+  const { enrichedTransactions, categories, currency, openAddModal } = useStore();
 
   const [selectedPeriod, setSelectedPeriod] = useState<ExpensePeriod>('this-month');
   const [customStart, setCustomStart] = useState<string>('');
@@ -121,7 +121,7 @@ export function ExpenseDashboard({ onOpenAddModal }: ExpenseDashboardProps) {
         </div>
 
         <button
-          onClick={onOpenAddModal}
+          onClick={() => (onOpenAddModal ? onOpenAddModal() : openAddModal('expense'))}
           className="self-start md:self-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-md shadow-rose-600/25 active:scale-98 transition-all flex items-center gap-1.5"
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -498,7 +498,7 @@ export function ExpenseDashboard({ onOpenAddModal }: ExpenseDashboardProps) {
           {insights.map((insight, idx) => (
             <div
               key={idx}
-              className="p-3.5 bg-white/80 backdrop-blur-xs rounded-xl border border-blue-100/80 shadow-xs text-xs font-medium text-slate-800 flex items-start gap-2.5"
+              className="p-3.5 bg-white/80 backdrop-blur-sm rounded-xl border border-blue-100/80 shadow-xs text-xs font-medium text-slate-800 flex items-start gap-2.5"
             >
               <span className="w-2 h-2 rounded-full bg-blue-600 mt-1.5 shrink-0" />
               <span className="leading-relaxed">{insight}</span>

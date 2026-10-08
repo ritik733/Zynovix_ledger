@@ -22,16 +22,17 @@ import { PersonDetailModal } from '../modals/PersonDetailModal';
 import { SettleModal } from '../modals/SettleModal';
 
 interface AccountBalanceDashboardProps {
-  onOpenAddModal: (type?: 'expense' | 'borrow' | 'lending' | 'repayment') => void;
+  onOpenAddModal?: (type?: 'expense' | 'borrow' | 'lending' | 'repayment') => void;
 }
 
-export function AccountBalanceDashboard({ onOpenAddModal }: AccountBalanceDashboardProps) {
+export function AccountBalanceDashboard({ onOpenAddModal }: AccountBalanceDashboardProps = {}) {
   const {
     accountBalanceSummary,
     personSummaries,
     ageingAnalysis,
     enrichedTransactions,
     currency,
+    openAddModal,
   } = useStore();
 
   const [selectedPerson, setSelectedPerson] = useState<PersonSummary | null>(null);
@@ -84,7 +85,7 @@ export function AccountBalanceDashboard({ onOpenAddModal }: AccountBalanceDashbo
 
         <div className="relative z-10 flex flex-wrap items-center gap-3">
           <button
-            onClick={() => onOpenAddModal('borrow')}
+            onClick={() => (onOpenAddModal ? onOpenAddModal('borrow') : openAddModal('borrow'))}
             className="px-4 py-2.5 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-200 border border-amber-400/30 hover:bg-amber-500/30 transition-all flex items-center gap-1.5"
           >
             <ArrowDownLeft className="w-4 h-4 text-amber-300" />
@@ -92,7 +93,7 @@ export function AccountBalanceDashboard({ onOpenAddModal }: AccountBalanceDashbo
           </button>
 
           <button
-            onClick={() => onOpenAddModal('lending')}
+            onClick={() => (onOpenAddModal ? onOpenAddModal('lending') : openAddModal('lending'))}
             className="px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 hover:bg-emerald-500/30 transition-all flex items-center gap-1.5"
           >
             <ArrowUpRight className="w-4 h-4 text-emerald-300" />
@@ -100,7 +101,7 @@ export function AccountBalanceDashboard({ onOpenAddModal }: AccountBalanceDashbo
           </button>
 
           <button
-            onClick={() => onOpenAddModal('expense')}
+            onClick={() => (onOpenAddModal ? onOpenAddModal('expense') : openAddModal('expense'))}
             className="px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-200 border border-rose-400/30 hover:bg-rose-500/30 transition-all flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4 text-rose-300" />
@@ -264,7 +265,7 @@ export function AccountBalanceDashboard({ onOpenAddModal }: AccountBalanceDashbo
               Add a borrow or lending transaction to automatically track balances by person.
             </p>
             <button
-              onClick={() => onOpenAddModal('borrow')}
+              onClick={() => (onOpenAddModal ? onOpenAddModal('borrow') : openAddModal('borrow'))}
               className="mt-4 px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-xl hover:bg-blue-700"
             >
               + Record First Borrow / Lend
@@ -519,7 +520,11 @@ export function AccountBalanceDashboard({ onOpenAddModal }: AccountBalanceDashbo
           onOpenAddTransactionForPerson={(type) => {
             const pId = selectedPerson.person_id;
             setSelectedPerson(null);
-            onOpenAddModal(type);
+            if (onOpenAddModal) {
+              onOpenAddModal(type);
+            } else {
+              openAddModal(type, pId);
+            }
           }}
         />
       )}

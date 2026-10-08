@@ -24,10 +24,10 @@ import { EditTransactionModal } from '../modals/EditTransactionModal';
 import { DeleteConfirmModal } from '../modals/DeleteConfirmModal';
 
 interface TransactionsViewProps {
-  onOpenAddModal: (type?: 'expense' | 'borrow' | 'lending' | 'repayment') => void;
+  onOpenAddModal?: (type?: 'expense' | 'borrow' | 'lending' | 'repayment') => void;
 }
 
-export function TransactionsView({ onOpenAddModal }: TransactionsViewProps) {
+export function TransactionsView({ onOpenAddModal }: TransactionsViewProps = {}) {
   const {
     enrichedTransactions,
     settlements,
@@ -35,6 +35,7 @@ export function TransactionsView({ onOpenAddModal }: TransactionsViewProps) {
     categories,
     deleteTransaction,
     currency,
+    openAddModal,
   } = useStore();
 
   // Filter & Search states
@@ -160,7 +161,7 @@ export function TransactionsView({ onOpenAddModal }: TransactionsViewProps) {
             <span>Export CSV</span>
           </button>
           <button
-            onClick={() => onOpenAddModal()}
+            onClick={() => (onOpenAddModal ? onOpenAddModal() : openAddModal())}
             className="px-4 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/25 active:scale-98 transition-all flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
