@@ -123,8 +123,8 @@ A modern, responsive, production-ready web application built with **Next.js 16 (
 Create `.env.local` in the project root (or set in your Vercel Project Settings):
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+RITIK_SUPABASE_URL=https://your-project.supabase.co
+RITIK_SUPABASE_PUBLISHABLE_KEY=your-supabase-anon-key
 ```
 
 *Note: If no Supabase credentials are provided, the application automatically runs in an interactive **Local Demo Mode** with persistent storage and seed data, displaying a friendly badge in the header.*
@@ -159,6 +159,6 @@ In the app UI, navigate to **Settings** and click **"Load Test Scenarios"** to i
 1. Push this repository to GitHub or GitLab.
 2. In [Vercel](https://vercel.com), click **Add New Project** and import the repository.
 3. Add the two environment variables:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `RITIK_SUPABASE_URL`
+   - `RITIK_SUPABASE_PUBLISHABLE_KEY`
 4. Deploy! Next.js 16 compiles and deploys seamlessly.

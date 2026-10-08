@@ -154,11 +154,11 @@ export function SettingsView() {
             </code>
             . In Vercel, Supabase credentials are read automatically from{' '}
             <code className="bg-white px-1.5 py-0.5 rounded border border-slate-300 font-mono text-[11px]">
-              NEXT_PUBLIC_SUPABASE_URL
+              RITIK_SUPABASE_URL
             </code>{' '}
             and{' '}
             <code className="bg-white px-1.5 py-0.5 rounded border border-slate-300 font-mono text-[11px]">
-              NEXT_PUBLIC_SUPABASE_ANON_KEY
+              RITIK_SUPABASE_PUBLISHABLE_KEY
             </code>
             .
           </p>
