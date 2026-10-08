@@ -111,7 +111,7 @@ interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | null>(null);
 
-const STORAGE_KEY = 'zynovix_accounts_ledger_v1';
+const STORAGE_KEY = 'zynovix_accounts_ledger_v2';
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [isSupabaseConfigured, setIsSupabaseConfigured] = useState<boolean>(false);
@@ -206,6 +206,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const loadFromLocalStorage = useCallback(() => {
     try {
       setIsLoading(true);
+      // Clean up previous v1 seed storage if exists
+      localStorage.removeItem('zynovix_accounts_ledger_v1');
+
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
@@ -215,30 +218,28 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         setSettlements(parsed.settlements || []);
         if (parsed.currency) setCurrency(parsed.currency);
       } else {
-        // First time initialization: populate sample scenario test data!
-        const initial = getSampleInitialData('local-user');
-        setCategories(initial.categories);
-        setPeople(initial.people);
-        setTransactions(initial.transactions);
-        setSettlements(initial.settlements);
+        // Initial state: Start completely clean with 0 entries
+        setCategories(DEFAULT_CATEGORIES);
+        setPeople([]);
+        setTransactions([]);
+        setSettlements([]);
         localStorage.setItem(
           STORAGE_KEY,
           JSON.stringify({
-            categories: initial.categories,
-            people: initial.people,
-            transactions: initial.transactions,
-            settlements: initial.settlements,
+            categories: DEFAULT_CATEGORIES,
+            people: [],
+            transactions: [],
+            settlements: [],
             currency: '₹',
           })
         );
       }
     } catch (err: any) {
       console.error('Failed to load local storage:', err);
-      const initial = getSampleInitialData('local-user');
-      setCategories(initial.categories);
-      setPeople(initial.people);
-      setTransactions(initial.transactions);
-      setSettlements(initial.settlements);
+      setCategories(DEFAULT_CATEGORIES);
+      setPeople([]);
+      setTransactions([]);
+      setSettlements([]);
     } finally {
       setIsLoading(false);
     }
@@ -766,6 +767,17 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setSettlements([]);
     setCategories(DEFAULT_CATEGORIES);
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('zynovix_accounts_ledger_v1');
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        categories: DEFAULT_CATEGORIES,
+        people: [],
+        transactions: [],
+        settlements: [],
+        currency: '₹',
+      })
+    );
   };
 
   const exportDataToJSON = () => {
